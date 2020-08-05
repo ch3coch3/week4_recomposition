@@ -72,15 +72,15 @@ def getNext(url):
 #		   主程式:進行資料分析			  #
 #############################################
 if __name__ == '__main__':
-	tStart = time.time()	# begin timecal
+	timeStart = time.time()	# begin timecall
 
 	KEY = 1																#有沒有加入搜尋字眼 1:有 0:沒有
 	Board = 'Lifeismoney'												#選取PTT看板	!!!!!!(凡是設有內容分級規定處理，即不能直接進入看板者，EX.八卦版...等會沒辦法爬)!!!!!
 	URL = 'https://www.ptt.cc/bbs/' + Board + '/index.html'
 
-	datazise = 3
+	datasize = 3
 	urls = []
-	semantic_list = ["口罩","酒精","衛生紙"]			#存放輸入的關鍵字
+	keyword_list = ["口罩","酒精","衛生紙"]			#存放輸入的關鍵字
 	articles = []						#articles: ptt文章所有內容 
 	judgeMonth = False					# judge the month
 	page = 0
@@ -105,37 +105,37 @@ if __name__ == '__main__':
 			break
 	############################################################
 	#計算關鍵字出現次數
-	sum_sem_list = []			#該關鍵字出現總數
+	sum_keyword_list = []			#該關鍵字出現總數
 	mask_month = [0,0,0,0,0,0,0,0]		# store the number of keyword refereced per month
 	alcohol_month = [0,0,0,0,0,0,0,0]  #####刪掉四個0
-	paper_month = [0,0,0,0,0,0,0,0]
-	for i in range(datazise):														
-		sem_count = 0
+	toiletpaper_month = [0,0,0,0,0,0,0,0]
+	for i in range(datasize):														
+		keyword_count = 0
 		count = 0
 		for index in articles:
-			sem_count = str(index[0]).count(semantic_list[i])
+			keyword_count = str(index[0]).count(keyword_list[i])
 			if i == 0:
 				if index[1] == 12:
 					index[1] = 0
 				elif index[1] == 11:
 					continue
-				mask_month[index[1]] += sem_count
+				mask_month[index[1]] += keyword_count
 			if i == 1:
 				if index[1] == 12:
 					index[1] = 0
 				elif index[1] == 11:
 					continue
-				alcohol_month[index[1]] += sem_count
+				alcohol_month[index[1]] += keyword_count
 			if i == 2:
 				if index[1] == 12:
 					index[1] = 0
 				elif index[1] == 11:
 					continue
-				paper_month[index[1]] += sem_count
+				toiletpaper_month[index[1]] += keyword_count
 			count += 1
 		# print(mask_month)
 		# print(alcohol_month)
-		# print(paper_month)
+		# print(toiletpaper_month)
 
 	#######################################
 	#				將結果繪圖			  #
@@ -155,7 +155,7 @@ plt.ylabel("次數",FontProperties=myfont)
 
 plt1.plot(month,mask_month,'b-o',label ="口罩")
 plt1.plot(month,alcohol_month,'g-o',label = "酒精")
-plt1.plot(month,paper_month,'k-o',label = '衛生紙')
+plt1.plot(month,toiletpaper_month,'k-o',label = '衛生紙')
 plt.legend(prop=myfont)
 
 plt2=plt1.twinx()
