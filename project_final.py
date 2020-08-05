@@ -68,7 +68,6 @@ def getNext(url):
 		if i.getText() == '‹ 上頁':
 			nextPage = 'https://www.ptt.cc' + i.get('href')
 	return nextPage
-
 #############################################
 #					畫圖					#
 #############################################
@@ -97,8 +96,6 @@ def drawPicture(month,mask_month,alcohol_month,paper_month,people):
 #############################################
 if __name__ == '__main__':
 	timeStart = time.time()	# begin timecall
-
-	KEY = 1																#有沒有加入搜尋字眼 1:有 0:沒有
 	Board = 'Lifeismoney'												#選取PTT看板	!!!!!!(凡是設有內容分級規定處理，即不能直接進入看板者，EX.八卦版...等會沒辦法爬)!!!!!
 	URL = 'https://www.ptt.cc/bbs/' + Board + '/index.html'
 
@@ -157,10 +154,6 @@ if __name__ == '__main__':
 					continue
 				toiletpaper_month[index[1]] += keyword_count
 			count += 1
-		# print(mask_month)
-		# print(alcohol_month)
-		# print(toiletpaper_month)
-
 	#######################################
 	#				將結果繪圖			  #
 	#######################################
