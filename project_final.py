@@ -1,7 +1,6 @@
 #-*-coding:utf-8 -*-
-
 #############################################
-#			  將所需函式庫加入			 #
+#			  將所需函式庫加入			 	 #
 #############################################
 import requests
 from bs4 import BeautifulSoup
@@ -12,7 +11,6 @@ from matplotlib import pyplot as hold
 from matplotlib.font_manager import FontProperties
 from matplotlib import cm
 import numpy as np
-
 #############################################
 #				讀取PTT網頁				 #
 #############################################
@@ -27,7 +25,6 @@ def get_web_page(url):
 		return None
 	else:
 		return resp.text
-
 #############################################
 #		  對PTT網頁進行資料擷取			  #
 #############################################
@@ -57,7 +54,7 @@ def get_article_url(text):
 	return [url, month]
 
 #############################################
-#		讀取看板頁面(沒有加搜尋字眼時使用)	 #
+#		讀取看板頁面(沒有加搜尋字眼時使用)	  #
 ##################a##########################
 def getNext(url):
 	print(url)
@@ -68,54 +65,27 @@ def getNext(url):
 		if i.getText() == '‹ 上頁':
 			nextPage = 'https://www.ptt.cc' + i.get('href')
 	return nextPage
-
 #############################################
-#					畫圖					#
-#############################################
-def drawPicture(month,mask_month,alcohol_month,paper_month,people):
-	fig = plt.figure()
-	plt1 = fig.add_subplot()
-
-	plt.title('防疫用品討論度與確診人數關係圖',FontProperties = myfont)
-	plt.xlabel("時間(月)",FontProperties=myfont)
-	plt.ylabel("次數",FontProperties=myfont)
-
-	plt1.plot(month,mask_month,'b-o',label ="口罩")
-	plt1.plot(month,alcohol_month,'g-o',label = "酒精")
-	plt1.plot(month,toiletpaper_month,'k-o',label = '衛生紙')
-	plt.legend(prop=myfont)
-
-	plt2=plt1.twinx()
-
-	plt2.plot(month,people,'r-o',label = '確診人數')
-	plt2.set_ylabel("人數",FontProperties=myfont)
-	plt.show()
-
-
-#############################################
-#		   主程式:進行資料分析			  #
+#		   主程式:進行資料分析			     #
 #############################################
 if __name__ == '__main__':
-	timeStart = time.time()	# begin timecall
-
-	KEY = 1																#有沒有加入搜尋字眼 1:有 0:沒有
-	Board = 'Lifeismoney'												#選取PTT看板	!!!!!!(凡是設有內容分級規定處理，即不能直接進入看板者，EX.八卦版...等會沒辦法爬)!!!!!
+	tStart = time.time()	# begin timecal
+	Board = 'Lifeismoney'	#選取PTT看板	
 	URL = 'https://www.ptt.cc/bbs/' + Board + '/index.html'
-
 	datasize = 3
 	urls = []
-	keyword_list = ["口罩","酒精","衛生紙"]			#存放輸入的關鍵字
+	semantic_list = ["口罩","酒精","衛生紙"]			#存放輸入的關鍵字
 	articles = []						#articles: ptt文章所有內容 
 	judgeMonth = False					# judge the month
 	page = 0
-	while True:														#取得PTT頁面資訊
+	while True:							#取得PTT頁面資訊
 		print(page)
 		if page != 0:
 			URL = getNext(URL)
 		[urls, months] = get_article_url(get_web_page(URL))
 		print(months)
         # the stop month
-		if 8 in months and page != 0:
+		if 11 in months and page != 0:
 			judgeMonth = True
 			print("exit loop")
 	############################################################
@@ -129,44 +99,59 @@ if __name__ == '__main__':
 			break
 	############################################################
 	#計算關鍵字出現次數
-	sum_keyword_list = []			#該關鍵字出現總數
+	sum_sem_list = []			#該關鍵字出現總數
 	mask_month = [0,0,0,0,0,0,0,0,0]		# store the number of keyword refereced per month
-	alcohol_month = [0,0,0,0,0,0,0,0,0]  #####刪掉四個0
-	toiletpaper_month = [0,0,0,0,0,0,0,0,0]
+	alcohol_month = [0,0,0,0,0,0,0,0,0]  #####刪掉三個0
+	paper_month = [0,0,0,0,0,0,0,0,0]
 	for i in range(datasize):														
-		keyword_count = 0
+		sem_count = 0
 		count = 0
 		for index in articles:
-			keyword_count = str(index[0]).count(keyword_list[i])
+			sem_count = str(index[0]).count(semantic_list[i])
 			if i == 0:
 				if index[1] == 12:
 					index[1] = 0
 				elif index[1] == 11:
 					continue
-				mask_month[index[1]] += keyword_count
+				mask_month[index[1]] += sem_count
 			if i == 1:
 				if index[1] == 12:
 					index[1] = 0
 				elif index[1] == 11:
 					continue
-				alcohol_month[index[1]] += keyword_count
+				alcohol_month[index[1]] += sem_count
 			if i == 2:
 				if index[1] == 12:
 					index[1] = 0
 				elif index[1] == 11:
 					continue
-				toiletpaper_month[index[1]] += keyword_count
+				paper_month[index[1]] += sem_count
 			count += 1
-		# print(mask_month)
-		# print(alcohol_month)
-		# print(toiletpaper_month)
-
-	#######################################
-	#				將結果繪圖			  #
-	#######################################
-	myfont= FontProperties(fname=r'./GenYoGothicTW-Regular.ttf')							#字型檔，r'裡面放你的字型檔案路徑'
+#######################################
+#				將結果繪圖			  ##
+#######################################
+myfont= FontProperties(fname=r'./GenYoGothicTW-Regular.ttf')#字型檔，r'放字型檔案路徑'
+	
 month = ['12','1','2','3','4','5','6','7','8']
 people=[0,10,29,283,107,13,5,8,2]
 
+fig = plt.figure()
+plt1 = fig.add_subplot()
 
-drawPicture(month,mask_month,alcohol_month,toiletpaper_month,people)
+plt.title('防疫用品討論度與確診人數關係圖',FontProperties = myfont)
+plt.xlabel("時間(月)",FontProperties=myfont)
+plt.ylabel("次數",FontProperties=myfont)
+
+plt1.plot(month,mask_month,'b-o',label ="口罩")
+plt1.plot(month,alcohol_month,'g-o',label = "酒精")
+plt1.plot(month,paper_month,'k-o',label = '衛生紙')
+plt.legend(prop=myfont)
+
+plt2=plt1.twinx()
+
+plt2.plot(month,people,'r-o',label = '確診人數')
+plt2.set_ylabel("人數",FontProperties=myfont)
+
+plt2.legend(prop=myfont,loc="upper right")
+plt1.legend(prop=myfont,loc="upper left")
+plt.show()
