@@ -91,7 +91,7 @@ if __name__ == '__main__':
 		[urls, months] = get_article_url(get_web_page(URL))
 		print(months)
         # the stop month
-		if 11 in months and page != 0:
+		if 7 in months and page != 0:
 			judgeMonth = True
 			print("exit loop")
 	############################################################
@@ -106,9 +106,9 @@ if __name__ == '__main__':
 	############################################################
 	#計算關鍵字出現次數
 	sum_sem_list = []			#該關鍵字出現總數
-	mask_month = [0,0,0,0,0,0,0,0]		# store the number of keyword refereced per month
-	alcohol_month = [0,0,0,0,0,0,0,0]  #####刪掉四個0
-	paper_month = [0,0,0,0,0,0,0,0]
+	mask_month = [0,0,0,0,0,0,0,0,0]		# store the number of keyword refereced per month
+	alcohol_month = [0,0,0,0,0,0,0,0,0]  #####刪掉四個0
+	paper_month = [0,0,0,0,0,0,0,0,0]
 	for i in range(datazise):														
 		sem_count = 0
 		count = 0
@@ -142,8 +142,8 @@ if __name__ == '__main__':
 	#######################################
 	myfont= FontProperties(fname=r'./GenYoGothicTW-Regular.ttf')							#字型檔，r'裡面放你的字型檔案路徑'
 	
-month = ['12','1','2','3','4','5','6','7']
-people=[0,10,29,283,107,13,5,8]
+month = ['12','1','2','3','4','5','6','7','8']
+people=[0,10,29,283,107,13,5,8,2]
 
 fig = plt.figure()
 
