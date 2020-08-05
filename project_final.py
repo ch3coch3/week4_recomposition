@@ -68,6 +68,17 @@ def getNext(url):
 		if i.getText() == '‹ 上頁':
 			nextPage = 'https://www.ptt.cc' + i.get('href')
 	return nextPage
+############新增函式#################
+#								   #
+####################################
+def New_function(index[1],i)
+	if index[1] == 12:
+		index[1] = 0    		#####將判別12月以及11月的過程濃縮一個函式
+	elif index[1] == 11:
+		continue
+	return index[1]
+
+
 #############################################
 #		   主程式:進行資料分析			  #
 #############################################
@@ -78,7 +89,7 @@ if __name__ == '__main__':
 	Board = 'Lifeismoney'												#選取PTT看板	!!!!!!(凡是設有內容分級規定處理，即不能直接進入看板者，EX.八卦版...等會沒辦法爬)!!!!!
 	URL = 'https://www.ptt.cc/bbs/' + Board + '/index.html'
 
-	datazise = 3
+	
 	urls = []
 	semantic_list = ["口罩","酒精","衛生紙"]			#存放輸入的關鍵字
 	articles = []						#articles: ptt文章所有內容 
@@ -109,28 +120,19 @@ if __name__ == '__main__':
 	mask_month = [0,0,0,0,0,0,0,0]		# store the number of keyword refereced per month
 	alcohol_month = [0,0,0,0,0,0,0,0]  #####刪掉四個0
 	paper_month = [0,0,0,0,0,0,0,0]
-	for i in range(datazise):														
+	for i in range(3):														
 		sem_count = 0
 		count = 0
 		for index in articles:
 			sem_count = str(index[0]).count(semantic_list[i])
 			if i == 0:
-				if index[1] == 12:
-					index[1] = 0
-				elif index[1] == 11:
-					continue
+				index[1]=New_function(index[1],i)   	 		#####將判別12月以及11月的過程濃縮一個函式
 				mask_month[index[1]] += sem_count
 			if i == 1:
-				if index[1] == 12:
-					index[1] = 0
-				elif index[1] == 11:
-					continue
+				index[1]=New_function(index[1],i)
 				alcohol_month[index[1]] += sem_count
 			if i == 2:
-				if index[1] == 12:
-					index[1] = 0
-				elif index[1] == 11:
-					continue
+				index[1]=New_function(index[1],i)
 				paper_month[index[1]] += sem_count
 			count += 1
 		# print(mask_month)
