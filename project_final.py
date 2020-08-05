@@ -68,6 +68,34 @@ def getNext(url):
 		if i.getText() == '‹ 上頁':
 			nextPage = 'https://www.ptt.cc' + i.get('href')
 	return nextPage
+
+#############################################
+#					畫圖					#
+#############################################
+def drawPicture(month,mask_month,alcohol_month,paper_month,people):
+	fig = plt.figure()
+
+	plt1 = fig.add_subplot()
+
+	plt.title('防疫用品討論度與確診人數關係圖',FontProperties = myfont)
+	plt.xlabel("時間(月)",FontProperties=myfont)
+	plt.ylabel("次數",FontProperties=myfont)
+
+	plt1.plot(month,mask_month,'b-o',label ="口罩")
+	plt1.plot(month,alcohol_month,'g-o',label = "酒精")
+	plt1.plot(month,paper_month,'k-o',label = '衛生紙')
+	plt.legend(prop=myfont)
+
+	plt2=plt1.twinx()
+
+	plt2.plot(month,people,'r-o',label = '確診人數')
+	plt2.set_ylabel("人數",FontProperties=myfont)
+
+	plt2.legend(prop=myfont,loc="upper right")
+	plt1.legend(prop=myfont,loc="upper left")
+	plt.show()
+
+
 #############################################
 #		   主程式:進行資料分析			  #
 #############################################
@@ -91,7 +119,7 @@ if __name__ == '__main__':
 		[urls, months] = get_article_url(get_web_page(URL))
 		print(months)
         # the stop month
-		if 7 in months and page != 0:
+		if 8 in months and page != 0:
 			judgeMonth = True
 			print("exit loop")
 	############################################################
@@ -145,24 +173,4 @@ if __name__ == '__main__':
 month = ['12','1','2','3','4','5','6','7','8']
 people=[0,10,29,283,107,13,5,8,2]
 
-fig = plt.figure()
-
-plt1 = fig.add_subplot()
-
-plt.title('防疫用品討論度與確診人數關係圖',FontProperties = myfont)
-plt.xlabel("時間(月)",FontProperties=myfont)
-plt.ylabel("次數",FontProperties=myfont)
-
-plt1.plot(month,mask_month,'b-o',label ="口罩")
-plt1.plot(month,alcohol_month,'g-o',label = "酒精")
-plt1.plot(month,paper_month,'k-o',label = '衛生紙')
-plt.legend(prop=myfont)
-
-plt2=plt1.twinx()
-
-plt2.plot(month,people,'r-o',label = '確診人數')
-plt2.set_ylabel("人數",FontProperties=myfont)
-
-plt2.legend(prop=myfont,loc="upper right")
-plt1.legend(prop=myfont,loc="upper left")
-plt.show()
+drawPicture(month,mask_month,alcohol_month,paper_month,people)
