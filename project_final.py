@@ -68,6 +68,18 @@ def getNext(url):
 		if i.getText() == '‹ 上頁':
 			nextPage = 'https://www.ptt.cc' + i.get('href')
 	return nextPage
+############新增函式#################
+#								   #
+####################################
+def New_function(index):
+	if index == 12:
+		index = 0 
+		return index   		#####將判別12月以及11月的過程濃縮一個函式
+	elif index == 11:
+		return index
+	else:
+		return index
+
 #############################################
 #					畫圖					#
 #############################################
@@ -98,8 +110,8 @@ if __name__ == '__main__':
 	timeStart = time.time()	# begin timecall
 	Board = 'Lifeismoney'												#選取PTT看板	!!!!!!(凡是設有內容分級規定處理，即不能直接進入看板者，EX.八卦版...等會沒辦法爬)!!!!!
 	URL = 'https://www.ptt.cc/bbs/' + Board + '/index.html'
-
 	datasize = 3
+
 	urls = []
 	keyword_list = ["口罩","酒精","衛生紙"]			#存放輸入的關鍵字
 	articles = []									#articles: ptt文章所有內容 
@@ -136,22 +148,13 @@ if __name__ == '__main__':
 		for index in articles:
 			keyword_count = str(index[0]).count(keyword_list[i])
 			if i == 0:
-				if index[1] == 12:
-					index[1] = 0
-				elif index[1] == 11:
-					continue
+				index[1]=New_function(index[1])   	 		#####將判別12月以及11月的過程濃縮一個函式
 				mask_month[index[1]] += keyword_count
 			if i == 1:
-				if index[1] == 12:
-					index[1] = 0
-				elif index[1] == 11:
-					continue
+				index[1]=New_function(index[1])
 				alcohol_month[index[1]] += keyword_count
 			if i == 2:
-				if index[1] == 12:
-					index[1] = 0
-				elif index[1] == 11:
-					continue
+				index[1]=New_function(index[1])
 				toiletpaper_month[index[1]] += keyword_count
 			count += 1
 	myfont= FontProperties(fname=r'./GenYoGothicTW-Regular.ttf')							#字型檔，r'裡面放你的字型檔案路徑'
