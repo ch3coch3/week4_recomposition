@@ -102,10 +102,10 @@ if __name__ == '__main__':
 	datasize = 3
 	urls = []
 	keyword_list = ["口罩","酒精","衛生紙"]			#存放輸入的關鍵字
-	articles = []						#articles: ptt文章所有內容 
-	judgeMonth = False					# judge the month
+	articles = []									#articles: ptt文章所有內容 
+	judgeMonth = False								# judge the month
 	page = 0
-	while True:														#取得PTT頁面資訊
+	while True:										#取得PTT頁面資訊
 		print(page)
 		if page != 0:
 			URL = getNext(URL)
@@ -115,7 +115,7 @@ if __name__ == '__main__':
 		if 8 in months and page != 0:
 			judgeMonth = True
 			print("exit loop")
-	############################################################
+############################################################
 		for i in range(len(urls)):
 			print(urls[i])
 			text = get_web_page(urls[i])
@@ -124,11 +124,11 @@ if __name__ == '__main__':
 		page += 1
 		if judgeMonth == True:
 			break
-	############################################################
+############################################################
 	#計算關鍵字出現次數
-	sum_keyword_list = []			#該關鍵字出現總數
+	sum_keyword_list = []					#該關鍵字出現總數
 	mask_month = [0,0,0,0,0,0,0,0,0]		# store the number of keyword refereced per month
-	alcohol_month = [0,0,0,0,0,0,0,0,0]  #####刪掉四個0
+	alcohol_month = [0,0,0,0,0,0,0,0,0]  	#刪掉四個0
 	toiletpaper_month = [0,0,0,0,0,0,0,0,0]
 	for i in range(datasize):														
 		keyword_count = 0
@@ -154,12 +154,9 @@ if __name__ == '__main__':
 					continue
 				toiletpaper_month[index[1]] += keyword_count
 			count += 1
-	#######################################
-	#				將結果繪圖			  #
-	#######################################
 	myfont= FontProperties(fname=r'./GenYoGothicTW-Regular.ttf')							#字型檔，r'裡面放你的字型檔案路徑'
 month = ['12','1','2','3','4','5','6','7','8']
 people=[0,10,29,283,107,13,5,8,2]
 
-
+# 將結果繪圖
 drawPicture(month,mask_month,alcohol_month,toiletpaper_month,people)
