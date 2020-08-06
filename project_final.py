@@ -84,22 +84,24 @@ def New_function(index):
 #					畫圖					#
 #############################################
 def drawPicture(month,mask_month,alcohol_month,paper_month,people):
-	fig = plt.figure()
+	fig = plt.figure()													#繪圖
 	plt1 = fig.add_subplot()
 
 	plt.title('防疫用品討論度與確診人數關係圖',FontProperties = myfont)
 	plt.xlabel("時間(月)",FontProperties=myfont)
 	plt.ylabel("次數",FontProperties=myfont)
 
-	plt1.plot(month,mask_month,'b-o',label ="口罩")
+	plt1.plot(month,mask_month,'b-o',label ="口罩")						#畫出三個防疫用品折線圖
 	plt1.plot(month,alcohol_month,'g-o',label = "酒精")
 	plt1.plot(month,toiletpaper_month,'k-o',label = '衛生紙')
 	plt.legend(prop=myfont)
 
-	plt2=plt1.twinx()
+	plt2=plt1.twinx()													#畫右標
 
-	plt2.plot(month,people,'r-o',label = '確診人數')
-	plt2.set_ylabel("人數",FontProperties=myfont)
+	plt2.plot(month,people,'r-o',label = '確診人數')					#畫確診人數折線圖
+	plt2.set_ylabel("人數",FontProperties=myfont)						
+	plt2.legend(prop=myfont,loc="upper right")							#放置圖例
+	plt1.legend(prop=myfont,loc="upper left")
 	plt.show()
 
 
@@ -109,32 +111,31 @@ def drawPicture(month,mask_month,alcohol_month,paper_month,people):
 if __name__ == '__main__':
 	timeStart = time.time()	# begin timecall
 	Board = 'Lifeismoney'												#選取PTT看板	!!!!!!(凡是設有內容分級規定處理，即不能直接進入看板者，EX.八卦版...等會沒辦法爬)!!!!!
-	URL = 'https://www.ptt.cc/bbs/' + Board + '/index.html'
-	datasize = 3
-
-	urls = []
+	URL = 'https://www.ptt.cc/bbs/' + Board + '/index.html'				#PPT網址
+	datasize = 3														#輸入爬的關鍵字數目
+	urls = []															#存放網址
 	keyword_list = ["口罩","酒精","衛生紙"]			#存放輸入的關鍵字
-	articles = []									#articles: ptt文章所有內容 
-	judgeMonth = False								# judge the month
-	page = 0
-	while True:										#取得PTT頁面資訊
+	articles = []						#articles: ptt文章所有內容 
+	judgeMonth = False					# judge the month
+	page = 0							#從第0頁開始跑
+	while True:														#取得PTT頁面資訊
 		print(page)
 		if page != 0:
 			URL = getNext(URL)
 		[urls, months] = get_article_url(get_web_page(URL))
 		print(months)
         # the stop month
-		if 8 in months and page != 0:
+		if 8 in months and page != 0:								#到11月就停止
 			judgeMonth = True
 			print("exit loop")
-############################################################
-		for i in range(len(urls)):
+	############################################################
+		for i in range(len(urls)):									#將網址印出
 			print(urls[i])
 			text = get_web_page(urls[i])
 			article, push_tag = get_data(text)
 			articles.append([article,months[i]])
-		page += 1
-		if judgeMonth == True:
+		page += 1													#爬下一頁
+		if judgeMonth == True:										#爬到11月即跳出迴圈
 			break
 ############################################################
 	#計算關鍵字出現次數
@@ -143,23 +144,23 @@ if __name__ == '__main__':
 	alcohol_month = [0,0,0,0,0,0,0,0,0]  	#刪掉四個0
 	toiletpaper_month = [0,0,0,0,0,0,0,0,0]
 	for i in range(datasize):														
-		keyword_count = 0
+		keyword_count = 0					#計算關鍵字出現次數
 		count = 0
 		for index in articles:
 			keyword_count = str(index[0]).count(keyword_list[i])
-			if i == 0:
+			if i == 0:						#計算口罩次數
 				index[1]=New_function(index[1])   	 		#####將判別12月以及11月的過程濃縮一個函式
 				mask_month[index[1]] += keyword_count
-			if i == 1:
+			if i == 1:						#計算酒精出現次數
 				index[1]=New_function(index[1])
 				alcohol_month[index[1]] += keyword_count
-			if i == 2:
+			if i == 2:						#計算衛生紙出現次數
 				index[1]=New_function(index[1])
 				toiletpaper_month[index[1]] += keyword_count
 			count += 1
 	myfont= FontProperties(fname=r'./GenYoGothicTW-Regular.ttf')							#字型檔，r'裡面放你的字型檔案路徑'
-month = ['12','1','2','3','4','5','6','7','8']
-people=[0,10,29,283,107,13,5,8,2]
+month = ['12','1','2','3','4','5','6','7','8']				#月份LIST
+people=[0,10,29,283,107,13,5,8,2]							#確診數list
 
 # 將結果繪圖
 drawPicture(month,mask_month,alcohol_month,toiletpaper_month,people)
